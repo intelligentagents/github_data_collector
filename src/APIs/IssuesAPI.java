@@ -28,6 +28,7 @@ public class IssuesAPI {
 					+ " \"https://api.github.com/repos/" + url + "/issues?state=all&page=" + i + "\"";
 
 			boolean empty = JSONManager.getJSON(path + i + ".json", command, false);
+			
 
 			if (empty) {
 				break;

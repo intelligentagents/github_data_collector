@@ -1,6 +1,5 @@
 package APIs;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -10,18 +9,16 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.LinkedTreeMap;
 
-import utils.Tokens;
 import utils.IO;
 import utils.JSONManager;
 import utils.LocalPaths;
+import utils.Tokens;
 import utils.Util;
 
 public class PullsAPI {
 
 	public static void downloadIndividualPulls(String project, String url) {
 
-		generatePullsIds(project);
-		
 		String pathIndividual = Util.getIndividualPullsFolder(project);
 		String path = Util.getPullsFolder(project);
 		List<String> ids = IO.readAnyFile(path + "pulls_ids.txt");
@@ -60,6 +57,8 @@ public class PullsAPI {
 	}
 
 	public static void downloadCommentsInReviews(String project, String url) {
+
+		generatePullsIds(project);
 		
 		System.out.println("Download Comments in Reviews");
 
@@ -69,17 +68,17 @@ public class PullsAPI {
 		for (String l : pullsIds) {
 
 			String[] line = l.split(",");
+			
 			String id = line[1];
-			
+
 			String subPath = pathPullsComments + id;
-			
+
 			Util.checkDirectory(subPath);
-			
+
 			for (int i = 1; i <= 50; i++) {
-				
+
 				String command = LocalPaths.CURL + " -i -u " + Tokens.USERNAME + ":" + Tokens.PASSWORD
 						+ " \"https://api.github.com/repos/" + url + "/pulls/" + id + "/comments?page=" + i + "\"";
-				
 
 				boolean empty = JSONManager.getJSON(pathPullsComments + id + "/comments_" + i + ".json", command, true);
 
@@ -93,25 +92,26 @@ public class PullsAPI {
 	}
 
 	public static void generatePullsCalls(String project, String url) {
-	
+
 		System.out.println("Generating Pulls Calls");
-	
+
 		String path = Util.getGeneralPullsFolder(project);
-	
+
 		for (int i = 1; i < 2000; i++) {
-	
+
 			String command = LocalPaths.CURL + " -i -u " + Tokens.USERNAME + ":" + Tokens.PASSWORD
 					+ " \"https://api.github.com/repos/" + url + "/pulls" + "?state=all&page=" + i + "\"";
-	
+
 			boolean empty = JSONManager.getJSON(path + i + ".json", command, false);
-	
+			System.out.println(command);
+
 			if (empty) {
 				break;
 			}
 		}
-	
+
 	}
-	
+
 	private static void generatePullsIds(String project) {
 
 		String f = "";
@@ -200,5 +200,45 @@ public class PullsAPI {
 
 	}
 
+	@SuppressWarnings("unchecked")
+	public static void generateIndividualPullsCalls(String project, String url) {
+
+		System.out.println("Generating Individual Pulls Calls");
+
+		try {
+
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			List<String> ids = new ArrayList<>();
+			String path = Util.getPullsFolder(project);
+			List<String> files = IO.filesOnFolder(Util.getGeneralPullsFolder(project));
+
+			for (String file : files) {
+
+				if (!file.contains("json")) {
+					continue;
+				}
+
+				String fileData = new String(Files.readAllBytes(Paths.get(Util.getGeneralPullsFolder(project) + file)));
+				List<LinkedTreeMap> pulls = gson.fromJson(fileData, List.class);
+
+				for (LinkedTreeMap<?, ?> pull : pulls) {
+
+					String id = pull.get("number") + "";
+
+					id = id.replace(".", "");
+					id = id.substring(0, id.length() - 1);
+
+					ids.add(id);
+
+				}
+
+			}
+			
+			IO.writeAnyFile(path + "pulls_ids.txt", ids);
+			downloadIndividualPulls(project, url);
+		} catch (Exception e) {
+			e.printStackTrace();// TODO: handle exception
+		}
+	}
 
 }

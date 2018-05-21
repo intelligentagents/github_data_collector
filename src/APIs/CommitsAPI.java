@@ -52,8 +52,8 @@ public class CommitsAPI {
 					+ " \"https://api.github.com/repos/" + url + "/commits?page=" + j + "\"";
 			boolean empty = false;
 
-			empty = JSONManager.getJSON(path + j + ".json", command, true);
-
+			empty = JSONManager.getJSON(path + j + ".json", command, false);
+			
 			if (empty) {
 				break;
 			}

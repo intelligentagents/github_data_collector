@@ -14,7 +14,14 @@ public class Main {
 	public static void main(String[] args) {
 
 		List<String> projects = new ArrayList<>();
-
+		
+//		projects.add("atom");
+//		projects.add("hubot");
+//		projects.add("linguist");
+		projects.add("electron");
+//		projects.add("gitlfs");
+		
+/*
 		projects.add("elasticsearch");
 		projects.add("spring-boot");
 		projects.add("netty");
@@ -34,6 +41,7 @@ public class Main {
 
 		projects.add("glide");
 		projects.add("fresco");
+*/
 
 		for (int i = 0; i < projects.size(); i++) {
 
@@ -41,18 +49,18 @@ public class Main {
 
 			System.out.println(project);
 
-			CommitsAPI.downloadAllCommits(project, URLs.getUrl(project));
-			CommitsAPI.downloadAllIndividualCommits(project, URLs.getUrl(project));
+			//CommitsAPI.downloadAllCommits(project, URLs.getUrl(project));
+			//CommitsAPI.downloadAllIndividualCommits(project, URLs.getUrl(project));
 
-			IssuesAPI.generateRepositoryIssuesCall(project, URLs.getUrl(project));
-			IssuesAPI.generateIndividualIssuesCall(project, URLs.getUrl(project));
+			//IssuesAPI.generateRepositoryIssuesCall(project, URLs.getUrl(project));
+			//IssuesAPI.generateIndividualIssuesCall(project, URLs.getUrl(project));
 
-			IssuesAPI.generateCommentsCalls(project, URLs.getUrl(project));
-			CommentsAPI.downloadGroupOfCommitComments(project, URLs.getUrl(project));
-			CommentsAPI.downloadIndividualCommitComments(project, URLs.getUrl(project));
+			//IssuesAPI.generateCommentsCalls(project, URLs.getUrl(project));
+			//CommentsAPI.downloadGroupOfCommitComments(project, URLs.getUrl(project));
+			//CommentsAPI.downloadIndividualCommitComments(project, URLs.getUrl(project));
 
 			PullsAPI.generatePullsCalls(project, URLs.getUrl(project));
-			PullsAPI.downloadIndividualPulls(project, URLs.getUrl(project));
+			PullsAPI.generateIndividualPullsCalls(project, URLs.getUrl(project));
 			PullsAPI.downloadCommentsInReviews(project, URLs.getUrl(project));
 
 		}

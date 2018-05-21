@@ -2,6 +2,7 @@ package utils;
 
 public class URLs {
 
+
 	public static final String elasticsearch = "elastic/elasticsearch";
 	public static final String spring_boot = "spring-projects/spring-boot";
 	public static final String netty = "netty/netty";
@@ -20,6 +21,13 @@ public class URLs {
 	public static final String fresco = "facebook/fresco";
 	public static final String rxjava = "ReactiveX/RxJava";
 
+	public static final String hubot = "hubotio/hubot";
+	public static final String linguist = "github/linguist";
+	public static final String electron = "electron/electron";
+	public static final String atom = "atom/atom";
+	public static final String gitlfs = "git-lfs/git-lfs";
+	
+
 	public static String getUrl(String project) {
 
 		project = project.replace("-", "_");
@@ -28,6 +36,16 @@ public class URLs {
 		System.out.println(project);
 		
 		switch (project) {
+		case "hubot":
+			return hubot;
+		case "linguist":
+			return linguist;
+		case "electron":
+			return electron;
+		case "atom":
+			return atom;
+		case "gitlfs":
+			return gitlfs;
 		case "elasticsearch":
 			return elasticsearch;
 		case "spring_boot":
